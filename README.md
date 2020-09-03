@@ -3,6 +3,9 @@
 Gear design lib.
 D3 Vizualization:
     - https://observablehq.com/@mbostock/epicyclic-gearing
+    - https://github.com/liabru/gears-d3-js
+
+Criar função geral para converter de in <-> mm;
 
 # 13 - Gears-General
 Características gerais das engrenagens:
@@ -10,11 +13,6 @@ Características gerais das engrenagens:
     - Relações cinemáticas;
     - Forças e momentos transmitidos;
     - Tensão, resistência, segurança e confiabilidade;
-    - Principais tipos:
-        - retas;
-        - helicoidais;
-        - cônicas;
-        - sem-fim;
 
 ## 13.1 - Types of Gears
 - Cilíndricas;
@@ -34,22 +32,65 @@ Características gerais das engrenagens:
 
 ## 13.3 - Conjugate Action
 - Analogia com Came;
-- Perfil de Involuta;
+- Perfil de **Involuta**;
+- Razão de velocidade angular constante;
 
 ## 13.4 - Involute Properties
+- Como gerar uma curva involuta?
+
 ## 13.5 - Fundamentals
+- Como desenhar os dentes de um par de engrenagens engrazadas?
+    - Grandezas fundamentais e restrições geométricas;
+    - Círculos;
+    - Centros;
+    - Pontos tangentes;
+    - Retas normais;
+    - Adoçamento;
+
 ## 13.6 - Contact Ratio
+- Mais de um par de dentes em contato;
+- Razão de contato (m_c = q_t/p);
+
 ## 13.7 - Interference
+- Ocorre quando o contato entre os dentes é feito em pontos que não pertencem a envoluta;
+- Determinar qual o menor número de dentes possível para que não ocorra interferência;
+
 ## 13.8 - The Forming of Gear Teeth
+- Fresagem;
+- Geração;
+- Caracol de Corte;
+- Acabamento;
+
 ## 13.9 - Straight Bevel Gears
+- Terminologia:
+    - Ângulos primitivos:
+        - Pinhão;
+        - Coroa;
+
 ## 13.10 - Parallel Helical Gears
+- Involuta Helicoidal;
+- Ângulo de Hélice;
+- Determinar qual o menor número de dentes possível para que não ocorra interferência;
+
 ## 13.11 - Worm Gears
+- Passos axial e circular;
+- Avanços;
+
 ## 13.12 - Tooth Systems
+- Padrões para possibilitar a **intercambialidade** entre engrenagens:
+    - Quaisquer número de dentes;
+    - Mesmo ângulo de pressão;
+    - Mesmo passo;
+
 ## 13.13 - Gear Trains
+- Valor de trem;
+- Trens planetários ou epicíclicos;
+
 ## 13.14 - Force Analysis - Spur Gearing
 ## 13.15 - Force Analysis - Bevel Gearing
 ## 13.16 - Force Analysis - Helical Gearing
 ## 13.17 - Force Analysis - Worm Gearing
+
 
 # 14 - Spur and Helical Gears
 ## 14.1 - The Lewis Bending Equation
