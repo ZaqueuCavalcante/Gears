@@ -2,8 +2,8 @@
 
 Gear design lib.
 D3 Vizualization:
-    - https://observablehq.com/@mbostock/epicyclic-gearing
-    - https://github.com/liabru/gears-d3-js
+- https://observablehq.com/@mbostock/epicyclic-gearing
+- https://github.com/liabru/gears-d3-js
 
 Criar função geral para converter de in <-> mm;
 
@@ -11,29 +11,41 @@ Criar função geral para converter de in <-> mm;
 Características gerais das engrenagens:
     - Geometria;
     - Relações cinemáticas;
-    - Forças e momentos transmitidos;
+    - Forças, momentos e transmissão de potência;
     - Tensão, resistência, segurança e confiabilidade;
 
 ## 13.1 - Types of Gears
-- Cilíndricas;
-- Helicoidais;
-- Cônicas;
+- Cilíndricas
+    - De dentes retos: a mais simples de todas. Usada para desenvolver as relações cinemáticas primárias.
+- Helicoidais
+    - Usadas em eixos paralelos e não paralelos.
+- Cônicas
+    - Usadas principalmente em eixos que se interceptam.
 - Sem-fim;
+    - Par pinhão-coroa sem-fim.
+    - Usados quando há demanda por altas razões de velocidade.
 
 ## 13.2 - Nomenclature
 - Para engrenagens cilíndricas de dentes retos:
+    - YouTube Vídeo: https://youtu.be/8s4zm_ajxAA
+    - Círculo Primitivo ou de Passo:
+        - Círculo teórico, base de todos os cálculos;
+        - Possui um diâmetro primitivo;
+        - Os círculos primitivos de um par de engrenagens são tangentes;
+        - O par é formado por Pinhão e Coroa;
     - Atributos fundamentais:
-        - Número de dentes (N);
-        - Diâmetro primitivo (d) [in ou mm];
+        - Número de dentes (N) [teets];
+        - Diâmetro primitivo (d) [in or mm];
     - Atributos derivados:
-        - Módulo (m = d/N) [mm];
-        - Passo diametral (P = N/d);
-        - Passo circular (p = PI*d/N);
+        - Módulo (m = d/N) [mm/teeth];
+        - Passo diametral (P = N/d) [teeths/in];
+        - Passo circular (p = PI*d/N) [mm/teeth];
 
 ## 13.3 - Conjugate Action
 - Analogia com Came;
 - Perfil de **Involuta**;
-- Razão de velocidade angular constante;
+- Razão de velocidade angular constante:
+    - Possível se os perfis de dente forem involutas;
 
 ## 13.4 - Involute Properties
 - Como gerar uma curva involuta?
@@ -46,14 +58,26 @@ Características gerais das engrenagens:
     - Pontos tangentes;
     - Retas normais;
     - Adoçamento;
+- Linha de pressão / ação / geração:
+    - Direção da *força resultante* que atua no ponto de contato entre as engrenagens;
+    - Faz um Ângulo de Pressão (phi) com a horizontal (20° a 25°);
+- Distâncias padronizadas (dentes intercambiáveis) para adendo e dedendo:
+    - a = 1/P;
+    - b = 1,25/P;
 
 ## 13.6 - Contact Ratio
 - Mais de um par de dentes em contato;
 - Razão de contato (m_c = q_t/p);
 
 ## 13.7 - Interference
-- Ocorre quando o contato entre os dentes é feito em pontos que não pertencem a envoluta;
-- Determinar qual o menor número de dentes possível para que não ocorra interferência;
+- Ocorre quando o contato entre os dentes é feito em pontos que não pertencem à envoluta;
+- Determinar qual o menor número de dentes possível para que não ocorra interferência (N_P):
+    - Fórmula para engrenagens de dentes retos com razão de engrenamento de 1:1;
+        - Depende dos parâmetros:
+            - Para dentes de altura completa, fator k = 1;
+            - Para dentes de altura diminuída, fator k = 0,8;
+            - Ângulo de pressão (phi);
+        - Depende do número de dentes do pinhão e da coroa também;
 
 ## 13.8 - The Forming of Gear Teeth
 - Fresagem;
