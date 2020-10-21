@@ -12,7 +12,7 @@ d_P = N_P/P_d   # [in] - Diâmetro primitivo do pinhão.
 N_G = 52   # [dentes] - Número de dentes da coroa.
 d_G = N_G/P_d   # [in] - Diâmetro primitivo da coroa.
 
-from math import pi, sqrt
+from math import pi, sqrt, sin, cos, radians
 n_P = 1800   # [rev/min] - Velocidade angular do pinhão.
 V = (pi*d_P*n_P)/12   # [ft/min] - Velocidade linear no contato entre pinhão e coroa.
 
@@ -64,6 +64,13 @@ K_R = fatorConfiabilidade(0.90)   # [] - Fator de confiabilidade.
 K_T = 1   # [] - Fator de temperatura.
 C_f = 1   # [] - Fator de condição superficial.
 
+m_N = 1   # [] - Razão de compartilhamento de carga.
+phi_t = 20   # [°] - Ângulo de pressão.
+phi_t = radians(phi_t)
+I = (sin(phi_t)*cos(phi_t)/(2*m_N)) * (m_G/(m_G+1))   # [] - Fator geométrico de resistência ao crateramento.
+
+C_P = 2300   # [sqrt(psi)] - Coeficiente elástico.
+
 import tensaoFlexaoAdmissivel as TFA
 H_B_P = 240   # [Brinell] - Dureza do pinhão.
 H_B_G = 200   # [Brinell] - Dureza da coroa.
@@ -74,6 +81,8 @@ import tensaoContatoAdmissivel as TCA
 S_C_P = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.brinellGrau1, H_B_P)
 S_C_G = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.brinellGrau1, H_B_G)
 
+# Figura 14-15
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # Flexão dos dentes do pinhão:
 J_P = 0.30   # [] - Razão de Poisson para o pinhão.
@@ -81,7 +90,11 @@ sigma_P = W_t * K_o * K_v * K_s_P * (P_d/F) * (K_m*K_B/J_P)   # [psi] - Tensão 
 S_F_P = ( (S_t_P*Y_N_P)/(K_T*K_R) ) / sigma_P   # [] - Fator de segurança sob flexão para o pinhão.
 
 # Flexão dos dentes da coroa:
-J_P = 0.30   # [] - Razão de Poisson para o pinhão.
-sigma_P = W_t * K_o * K_v * K_s_P * (P_d/F) * (K_m*K_B/J_P)   # [psi] - Tensão nos dentes do pinhão.
-S_F_P = ( (S_t_P*Y_N_P)/(K_T*K_R) ) / sigma_P   # [] - Fator de segurança sob flexão para o pinhão.
+J_G = 0.40   # [] - Razão de Poisson para o pinhão.
+sigma_G = W_t * K_o * K_v * K_s_G * (P_d/F) * (K_m*K_B/J_G)   # [psi] - Tensão nos dentes do pinhão.
+S_F_G = ( (S_t_G*Y_N_G)/(K_T*K_R) ) / sigma_G   # [] - Fator de segurança sob flexão para o pinhão.
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Desgaste dos dentes do pinhão:
+sigma_c_P = C_P * (W_t * K_o * K_v * K_s_P * (K_m/(d_P*F)) * (C_f/I))**(1/2)   # [psi] - Tensão nos dentes do pinhão.
+S_H_P = ( (S_t_P*Y_N_P)/(K_T*K_R) ) / sigma_P   # [] - Fator de segurança sob flexão para o pinhão.
