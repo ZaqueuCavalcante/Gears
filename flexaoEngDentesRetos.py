@@ -46,4 +46,42 @@ C_ma = FDC.C_ma(FDC.C_ma_TIPO.fechadasComerciais, F)
 C_e = FDC.C_e_TIPO.outrasCondicoes.value
 K_m = FDC.fatorDistribuicaoCarga(C_mc, C_pf, C_pm, C_ma, C_e)   # [] - Fator de distribuição de carga.
 
+from fatorEspessuraAro import fatorEspessuraAro
+t_R = 2   # [in] - Espessura do aro abaixo da borda.
+h_t = 1   # [in] - Altura do dente.
+m_B = t_R/h_t   # [] - Razão auxiliar.
+K_B = fatorEspessuraAro(m_B)   # [] - Fator de espessura de aro.
+
+import fatorCiclagemTensao as FCT
+m_G = N_G/N_P    # [] - Razão de velocidades.
+N_CC_P = 1E8   # [ciclos] - Número de ciclos de carga para o pinhão.
+N_CC_G = 1E8 / m_G   # [ciclos] - Número de ciclos de carga para a coroa.
+Y_N_P = FCT.fatorCiclagemTensao(N_CC_P)   # [] - Para o pinhão.
+Y_N_G = FCT.fatorCiclagemTensao(N_CC_G)   # [] - Para a coroa.
+
+from fatorConfiabilidade import fatorConfiabilidade
+K_R = fatorConfiabilidade(0.90)   # [] - Fator de confiabilidade.
+K_T = 1   # [] - Fator de temperatura.
+C_f = 1   # [] - Fator de condição superficial.
+
+import tensaoFlexaoAdmissivel as TFA
+H_B_P = 240   # [Brinell] - Dureza do pinhão.
+H_B_G = 200   # [Brinell] - Dureza da coroa.
+S_t_P = TFA.tensaoFlexaoAdmissivel(TFA.Dureza_TIPO.brinellGrau1, H_B_P)   # [psi] - Para o pinhão.
+S_t_G = TFA.tensaoFlexaoAdmissivel(TFA.Dureza_TIPO.brinellGrau1, H_B_G)   # [psi] - Para a coroa.
+
+import tensaoContatoAdmissivel as TCA
+S_C_P = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.brinellGrau1, H_B_P)
+S_C_G = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.brinellGrau1, H_B_G)
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Flexão dos dentes do pinhão:
+J_P = 0.30   # [] - Razão de Poisson para o pinhão.
+sigma_P = W_t * K_o * K_v * K_s_P * (P_d/F) * (K_m*K_B/J_P)   # [psi] - Tensão nos dentes do pinhão.
+S_F_P = ( (S_t_P*Y_N_P)/(K_T*K_R) ) / sigma_P   # [] - Fator de segurança sob flexão para o pinhão.
+
+# Flexão dos dentes da coroa:
+J_P = 0.30   # [] - Razão de Poisson para o pinhão.
+sigma_P = W_t * K_o * K_v * K_s_P * (P_d/F) * (K_m*K_B/J_P)   # [psi] - Tensão nos dentes do pinhão.
+S_F_P = ( (S_t_P*Y_N_P)/(K_T*K_R) ) / sigma_P   # [] - Fator de segurança sob flexão para o pinhão.
 
