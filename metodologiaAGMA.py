@@ -81,7 +81,13 @@ import tensaoContatoAdmissivel as TCA
 S_C_P = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.brinellGrau1, H_B_P)
 S_C_G = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.brinellGrau1, H_B_G)
 
-# Figura 14-15
+from fatorCiclagemTensaoCrateramento import fatorCiclagemTensaoCrateramento
+Z_N_P = fatorCiclagemTensaoCrateramento(N_CC_P)   # [] - Para o pinhão.
+Z_N_G = fatorCiclagemTensaoCrateramento(N_CC_G)   # [] - Para a coroa.
+
+from fatorRazaoDureza import fatorRazaoDureza
+RD = H_B_P/H_B_G   # [] - Razão de dureza.
+C_H = fatorRazaoDureza(RD, m_G)   # [] - Fator de razão de dureza.
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # Flexão dos dentes do pinhão:
@@ -97,4 +103,8 @@ S_F_G = ( (S_t_G*Y_N_G)/(K_T*K_R) ) / sigma_G   # [] - Fator de segurança sob f
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # Desgaste dos dentes do pinhão:
 sigma_c_P = C_P * (W_t * K_o * K_v * K_s_P * (K_m/(d_P*F)) * (C_f/I))**(1/2)   # [psi] - Tensão nos dentes do pinhão.
-S_H_P = ( (S_t_P*Y_N_P)/(K_T*K_R) ) / sigma_P   # [] - Fator de segurança sob flexão para o pinhão.
+S_H_P = ( (S_C_P*Z_N_P)/(K_T*K_R) ) / sigma_c_P   # [] - Fator de segurança sob flexão para o pinhão.
+
+# Desgaste dos dentes da coroa:
+sigma_c_G = (K_s_G/K_s_P)**(1/2) * sigma_c_P   # [psi] - Tensão nos dentes da coroa.
+S_H_G = ( (S_C_G*Z_N_G*C_H)/(K_T*K_R) ) / sigma_c_G   # [] - Fator de segurança sob flexão para a coroa.
