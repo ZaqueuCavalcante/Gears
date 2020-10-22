@@ -60,7 +60,8 @@ Y_N_P = FCT.fatorCiclagemTensao(N_CC_P)   # [] - Para o pinhão.
 Y_N_G = FCT.fatorCiclagemTensao(N_CC_G)   # [] - Para a coroa.
 
 from fatorConfiabilidade import fatorConfiabilidade
-K_R = fatorConfiabilidade(0.90)   # [] - Fator de confiabilidade.
+R = 0.90   # [] - Confiabilidade.
+K_R = fatorConfiabilidade(R)   # [] - Fator de confiabilidade.
 K_T = 1   # [] - Fator de temperatura.
 C_f = 1   # [] - Fator de condição superficial.
 
