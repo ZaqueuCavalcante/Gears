@@ -5,21 +5,21 @@ from math import pi, sin, cos, radians
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # Decisões iniciais:
 
-H = 4   # [hp] - Potência transmitida do pinhão para a coroa.
-n_P = 1800   # [rev/min] - Velocidade angular do pinhão.
-R = 0.90   # [] - Confiabilidade considerando carga suave.
-N_CC_P = 1E8   # [ciclos] - Número de ciclos de carga para o pinhão.
+H = 22.93   # [hp] - Potência transmitida do pinhão para a coroa.
+n_P = 31.87   # [rev/min] - Velocidade angular do pinhão.
+R = 0.95   # [] - Confiabilidade considerando carga suave.
+N_CC_P = 25.5E6   # [ciclos] - Número de ciclos de carga para o pinhão.
 K_o = 1.00   # [] - Fator de sobrecarga, considerando carregamento uniforme.
 
 phi_n = 20   # [°] - Ângulo de pressão (sistema de dentes).
 
-N_P = 17   # [dentes] - Número de dentes do pinhão.
-N_G = 52   # [dentes] - Número de dentes da coroa.
+N_P = 40   # [dentes] - Número de dentes do pinhão.
+N_G = 200   # [dentes] - Número de dentes da coroa.
 
 Q_v = 6   # [] - Número de qualidade. De 3 a 7 inclue a maior parte das engrenagens comerciais.
 
-P_d = 10   # [dentes/in] - Passo diametral TENTATIVO.
-F = 1.5   # [in] - Largura de face/engrazamento.
+P_d = 4   # [dentes/in] - Passo diametral.
+F = 5   # [in] - Largura de face/engrazamento.
 
 m_B = 1.30   # [] - Razão auxiliar (apenas para ser > 1.20).
 
@@ -30,11 +30,11 @@ m_N = 1   # [] - Razão de compartilhamento de carga.
 
 C_P = 2300   # [sqrt(psi)] - Coeficiente elástico.
 
-H_B_P = 240   # [Brinell] - Dureza do pinhão.
-H_B_G = 200   # [Brinell] - Dureza da coroa.
+H_B_P = 300   # [Brinell] - Dureza do pinhão.
+H_B_G = 300   # [Brinell] - Dureza da coroa.
 
-J_P = 0.30   # [] - Razão de Poisson para o pinhão.
-J_G = 0.40   # [] - Razão de Poisson para a coroa.
+J_P = 0.44   # [] - Razão de Poisson para o pinhão.
+J_G = 0.47   # [] - Razão de Poisson para a coroa.
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # Análise cinemática e dinâmica:
@@ -46,7 +46,7 @@ V = (pi*d_P*n_P)/12   # [ft/min] - Velocidade linear no contato entre pinhão e 
 W_t = 33000*H/V   # [lbf] - Força tangencial no contato entre pinhão e coroa.
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# Cálculo da tensão de flexão:
+# Cálculo dos fatores:
 
 from fatorDinamico import fatorDinamico
 K_v = fatorDinamico(Q_v, V)   # [] - Fator dinâmico.
@@ -79,16 +79,16 @@ Y_N_G = FCT.fatorCiclagemTensao(N_CC_G)   # [] - Para a coroa.
 from fatorConfiabilidade import fatorConfiabilidade
 K_R = fatorConfiabilidade(R)   # [] - Fator de confiabilidade.
 
-phi_n = radians(phi_n)
-I = (sin(phi_n)*cos(phi_n)/(2*m_N)) * (m_G/(m_G+1))   # [] - Fator geométrico de resistência ao crateramento.
+import fatorGeometricoResistenciaCrateramento as FGRC
+I = FGRC.fatorGeometricoResistenciaCrateramento(phi_n, m_N, m_G)   # [] - Fator geométrico de resistência ao crateramento.
 
 import tensaoFlexaoAdmissivel as TFA
-S_t_P = TFA.tensaoFlexaoAdmissivel(TFA.Dureza_TIPO.brinellGrau1, H_B_P)   # [psi] - Para o pinhão.
-S_t_G = TFA.tensaoFlexaoAdmissivel(TFA.Dureza_TIPO.brinellGrau1, H_B_G)   # [psi] - Para a coroa.
+S_t_P = TFA.tensaoFlexaoAdmissivel(TFA.Dureza_TIPO.deNucleoGrau1Nitralloy, H_B_P)   # [psi] - Para o pinhão.
+S_t_G = TFA.tensaoFlexaoAdmissivel(TFA.Dureza_TIPO.deNucleoGrau1Nitralloy, H_B_G)   # [psi] - Para a coroa.
 
 import tensaoContatoAdmissivel as TCA
-S_C_P = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.brinellGrau1, H_B_P)
-S_C_G = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.brinellGrau1, H_B_G)
+S_C_P = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.Grau1Nitralloy135M, H_B_P)   # [psi] - Para o pinhão.
+S_C_G = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.Grau1Nitralloy135M, H_B_G)   # [psi] - Para a coroa.
 
 from fatorCiclagemTensaoCrateramento import fatorCiclagemTensaoCrateramento
 Z_N_P = fatorCiclagemTensaoCrateramento(N_CC_P)   # [] - Para o pinhão.
@@ -121,3 +121,5 @@ S_H_G = ( (S_C_G*Z_N_G*C_H)/(K_T*K_R) ) / sigma_c_G   # [] - Fator de segurança
 from compararFatoresSeguranca import compararFatoresSeguranca
 compararFatoresSeguranca("pinhão", S_F_P, S_H_P)
 compararFatoresSeguranca("coroa", S_F_G, S_H_G)
+
+print()
