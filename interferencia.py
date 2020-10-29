@@ -16,5 +16,4 @@ def Np(k, phi, m_G):
 def Ng(k, phi, Np):
     phi = radians(phi)
     aux = (sin(phi))**2
-    #return floor( ((Np**2)*aux - 4*(k**2)) / (4*k - 2*Np*aux) )
-    return ((Np**2)*aux - 4*(k**2)) / (4*k - 2*Np*aux)
+    return floor( ((Np**2)*aux - 4*(k**2)) / (4*k - 2*Np*aux) )

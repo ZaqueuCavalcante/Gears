@@ -11,7 +11,7 @@ R = 0.95   # [] - Confiabilidade considerando carga suave.
 N_CC_P = 25.5E6   # [ciclos] - Número de ciclos de carga para o pinhão.
 K_o = 1.00   # [] - Fator de sobrecarga, considerando carregamento uniforme.
 
-phi_n = 20   # [°] - Ângulo de pressão (sistema de dentes).
+phi_n = 23.1   # [°] - Ângulo de pressão (sistema de dentes).
 
 N_P = 40   # [dentes] - Número de dentes do pinhão.
 N_G = 200   # [dentes] - Número de dentes da coroa.
@@ -33,8 +33,8 @@ C_P = 2300   # [sqrt(psi)] - Coeficiente elástico.
 H_B_P = 300   # [Brinell] - Dureza do pinhão.
 H_B_G = 300   # [Brinell] - Dureza da coroa.
 
-J_P = 0.44   # [] - Razão de Poisson para o pinhão.
-J_G = 0.47   # [] - Razão de Poisson para a coroa.
+J_P = 0.5406   # [] - Razão de Poisson para o pinhão.
+J_G = 0.6014  # [] - Razão de Poisson para a coroa.
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # Análise cinemática e dinâmica:
@@ -46,7 +46,7 @@ V = (pi*d_P*n_P)/12   # [ft/min] - Velocidade linear no contato entre pinhão e 
 W_t = 33000*H/V   # [lbf] - Força tangencial no contato entre pinhão e coroa.
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# Cálculo dos fatores:
+# Cálculo dos fatores modificadores:
 
 from fatorDinamico import fatorDinamico
 K_v = fatorDinamico(Q_v, V)   # [] - Fator dinâmico.
