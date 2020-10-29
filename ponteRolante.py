@@ -6,9 +6,9 @@ from math import pi
 
 H = 22.93   # [hp] - Potência transmitida do pinhão para a coroa.
 n_P = 31.87   # [rev/min] - Velocidade angular do pinhão.
-R = 0.95   # [] - Confiabilidade considerando carga suave.
+R = 0.95   # [] - Confiabilidade, considerando carga suave.
 N_CC_P = 25.5E6   # [ciclos] - Número de ciclos de carga para o pinhão.
-K_o = 1.00   # [] - Fator de sobrecarga, considerando carregamento uniforme.
+K_o = 1   # [] - Fator de sobrecarga, considerando carregamento uniforme.
 
 phi_n = 23.1   # [°] - Ângulo de pressão (sistema de dentes).
 
@@ -20,13 +20,10 @@ Q_v = 6   # [] - Número de qualidade. De 3 a 7 inclue a maior parte das engrena
 P_d = 4   # [dentes/in] - Passo diametral.
 F = 5   # [in] - Largura de face/engrazamento.
 
-m_B = 1.30   # [] - Razão auxiliar (apenas para ser > 1.20).
-
+m_B = 1.30   # [] - Razão auxiliar, para cálculo do fator de espessura de borda. (m_B > 1.20).
 K_T = 1   # [] - Fator de temperatura.
 C_f = 1   # [] - Fator de condição superficial.
-
 m_N = 1   # [] - Razão de compartilhamento de carga.
-
 C_P = 2300   # [sqrt(psi)] - Coeficiente elástico.
 
 H_B_P = 300   # [Brinell] - Dureza do pinhão.
