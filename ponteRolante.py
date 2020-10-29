@@ -101,7 +101,7 @@ C_H = fatorRazaoDureza(RD, m_G)   # [] - Fator de razão de dureza.
 import interferencia
 k = 1   # [] - Considerando dentes de altura completa.
 N_min_P = interferencia.Np(k, phi_n, m_G)   # [dentes] - Número mínimo de dentes para o pinhão.
-N_max_G = interferencia.Ng(k, 18.7, N_P)   # [dentes] - Número máximo de dentes para a coroa.
+N_max_G = interferencia.Ng(k, phi_n, N_P)   # [dentes] - Número máximo de dentes para a coroa.
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # Flexão dos dentes do pinhão:
