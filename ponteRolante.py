@@ -1,5 +1,4 @@
-# Baseado na figura 14-17, do Shigley.
-# Dados retirados do exemplo 14-4.
+# Baseado nas figuras 14-17 e 14-18, do Shigley.
 from math import pi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
