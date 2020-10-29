@@ -10,7 +10,7 @@ R = 0.95   # [] - Confiabilidade, considerando carga suave.
 N_CC_P = 25.5E6   # [ciclos] - Número de ciclos de carga para o pinhão.
 K_o = 1   # [] - Fator de sobrecarga, considerando carregamento uniforme.
 
-phi_n = 23.1   # [°] - Ângulo de pressão (sistema de dentes).
+phi_n = 20   # [°] - Ângulo de pressão (sistema de dentes).
 
 N_P = 40   # [dentes] - Número de dentes do pinhão.
 N_G = 200   # [dentes] - Número de dentes da coroa.
