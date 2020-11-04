@@ -11,19 +11,21 @@ N_CC_P = 25.5E6   # [ciclos] - Número de ciclos de carga para o pinhão.
 K_o = 1   # [] - Fator de sobrecarga, considerando carregamento uniforme.
 
 phi_n = 20   # [°] - Ângulo de pressão (sistema de dentes).
+phi_t = 22.8   # [°] - Ângulo transversal.
+phi_helice = 30   # [°] - Ângulo de hélice.
 
 N_P = 18   # [dentes] - Número de dentes do pinhão.
-N_G = 45   # [dentes] - Número de dentes da coroa.
+N_G = 90   # [dentes] - Número de dentes da coroa.
 
 Q_v = 6   # [] - Número de qualidade. De 3 a 7 inclue a maior parte das engrenagens comerciais.
 
 P_d = 2.5   # [dentes/in] - Passo diametral.
-F = 5   # [in] - Largura de face/engrazamento.
+F = 7   # [in] - Largura de face/engrazamento.
 
 m_B = 1.30   # [] - Razão auxiliar, para cálculo do fator de espessura de borda. (m_B > 1.20).
 K_T = 1   # [] - Fator de temperatura.
 C_f = 1   # [] - Fator de condição superficial.
-m_N = 1   # [] - Razão de compartilhamento de carga.
+
 C_P = 2300   # [sqrt(psi)] - Coeficiente elástico.
 
 H_B_P = 300   # [Brinell] - Dureza do pinhão.
@@ -75,8 +77,11 @@ Y_N_G = FCT.fatorCiclagemTensao(N_CC_G)   # [] - Para a coroa.
 from fatorConfiabilidade import fatorConfiabilidade
 K_R = fatorConfiabilidade(R)   # [] - Fator de confiabilidade.
 
+from razaoCompartilhamentoCarga import razaoCompartilhamentoCarga
+m_N = razaoCompartilhamentoCarga(phi_n, phi_t, phi_helice, P_d, N_P, N_G)   # [] - Razão de compartilhamento de carga.
+
 import fatorGeometricoResistenciaCrateramento as FGRC
-I = FGRC.fatorGeometricoResistenciaCrateramento(phi_n, m_N, m_G)   # [] - Fator geométrico de resistência ao crateramento.
+I = FGRC.fatorGeometricoResistenciaCrateramento(phi_t, m_N, m_G)   # [] - Fator geométrico de resistência ao crateramento.
 
 from fatorCiclagemTensaoCrateramento import fatorCiclagemTensaoCrateramento
 Z_N_P = fatorCiclagemTensaoCrateramento(N_CC_P)   # [] - Para o pinhão.
@@ -118,4 +123,7 @@ from compararFatoresSeguranca import compararFatoresSeguranca
 compararFatoresSeguranca("pinhão", S_F_P, S_H_P)
 compararFatoresSeguranca("coroa", S_F_G, S_H_G)
 
-print("qewd")
+print(S_F_P)
+print(S_H_P)
+print(S_F_G)
+print(S_H_G)
