@@ -12,12 +12,12 @@ K_o = 1   # [] - Fator de sobrecarga, considerando carregamento uniforme.
 
 phi_n = 20   # [°] - Ângulo de pressão (sistema de dentes).
 
-N_P = 40   # [dentes] - Número de dentes do pinhão.
-N_G = 200   # [dentes] - Número de dentes da coroa.
+N_P = 18   # [dentes] - Número de dentes do pinhão.
+N_G = 45   # [dentes] - Número de dentes da coroa.
 
 Q_v = 6   # [] - Número de qualidade. De 3 a 7 inclue a maior parte das engrenagens comerciais.
 
-P_d = 4   # [dentes/in] - Passo diametral.
+P_d = 2.5   # [dentes/in] - Passo diametral.
 F = 5   # [in] - Largura de face/engrazamento.
 
 m_B = 1.30   # [] - Razão auxiliar, para cálculo do fator de espessura de borda. (m_B > 1.20).
@@ -78,14 +78,6 @@ K_R = fatorConfiabilidade(R)   # [] - Fator de confiabilidade.
 import fatorGeometricoResistenciaCrateramento as FGRC
 I = FGRC.fatorGeometricoResistenciaCrateramento(phi_n, m_N, m_G)   # [] - Fator geométrico de resistência ao crateramento.
 
-import tensaoFlexaoAdmissivel as TFA
-S_t_P = TFA.tensaoFlexaoAdmissivel(TFA.Dureza_TIPO.deNucleoGrau1Nitralloy, H_B_P)   # [psi] - Para o pinhão.
-S_t_G = TFA.tensaoFlexaoAdmissivel(TFA.Dureza_TIPO.deNucleoGrau1Nitralloy, H_B_G)   # [psi] - Para a coroa.
-
-import tensaoContatoAdmissivel as TCA
-S_C_P = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.Grau1Nitralloy135M, H_B_P)   # [psi] - Para o pinhão.
-S_C_G = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.Grau1Nitralloy135M, H_B_G)   # [psi] - Para a coroa.
-
 from fatorCiclagemTensaoCrateramento import fatorCiclagemTensaoCrateramento
 Z_N_P = fatorCiclagemTensaoCrateramento(N_CC_P)   # [] - Para o pinhão.
 Z_N_G = fatorCiclagemTensaoCrateramento(N_CC_G)   # [] - Para a coroa.
@@ -95,20 +87,28 @@ RD = H_B_P/H_B_G   # [] - Razão de dureza.
 C_H = fatorRazaoDureza(RD, m_G)   # [] - Fator de razão de dureza.
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# Flexão dos dentes do pinhão:
+# Tensões admissíveis:
+import tensaoFlexaoAdmissivel as TFA
+S_t_P = TFA.tensaoFlexaoAdmissivel(TFA.Dureza_TIPO.deNucleoGrau1Nitralloy, H_B_P)   # [psi] - Para o pinhão.
+S_t_G = TFA.tensaoFlexaoAdmissivel(TFA.Dureza_TIPO.deNucleoGrau1Nitralloy, H_B_G)   # [psi] - Para a coroa.
+
+import tensaoContatoAdmissivel as TCA
+S_C_P = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.Grau1Nitralloy135M, H_B_P)   # [psi] - Para o pinhão.
+S_C_G = TCA.tensaoContatoAdmissivel(TCA.Dureza_TIPO.Grau1Nitralloy135M, H_B_G)   # [psi] - Para a coroa.
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
+# Flexão nos dentes do pinhão e da coroa:
 sigma_P = W_t * K_o * K_v * K_s_P * (P_d/F) * (K_m*K_B/J_P)   # [psi] - Tensão nos dentes do pinhão.
 S_F_P = ( (S_t_P*Y_N_P)/(K_T*K_R) ) / sigma_P   # [] - Fator de segurança sob flexão para o pinhão.
 
-# Flexão dos dentes da coroa:
 sigma_G = W_t * K_o * K_v * K_s_G * (P_d/F) * (K_m*K_B/J_G)   # [psi] - Tensão nos dentes do pinhão.
 S_F_G = ( (S_t_G*Y_N_G)/(K_T*K_R) ) / sigma_G   # [] - Fator de segurança sob flexão para o pinhão.
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
-# Desgaste dos dentes do pinhão:
+# Desgaste nos dentes do pinhão e da coroa:
 sigma_c_P = C_P * (W_t * K_o * K_v * K_s_P * (K_m/(d_P*F)) * (C_f/I))**(1/2)   # [psi] - Tensão nos dentes do pinhão.
 S_H_P = ( (S_C_P*Z_N_P)/(K_T*K_R) ) / sigma_c_P   # [] - Fator de segurança sob desgaste para o pinhão.
 
-# Desgaste dos dentes da coroa:
 sigma_c_G = (K_s_G/K_s_P)**(1/2) * sigma_c_P   # [psi] - Tensão nos dentes da coroa.
 S_H_G = ( (S_C_G*Z_N_G*C_H)/(K_T*K_R) ) / sigma_c_G   # [] - Fator de segurança sob desgaste para a coroa.
 
@@ -118,4 +118,4 @@ from compararFatoresSeguranca import compararFatoresSeguranca
 compararFatoresSeguranca("pinhão", S_F_P, S_H_P)
 compararFatoresSeguranca("coroa", S_F_G, S_H_G)
 
-print()
+print("qewd")
