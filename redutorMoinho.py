@@ -4,7 +4,7 @@ usado diariamente de **3 a 10 horas**.
 Um motor de indução com rotor de gaiola de **1200 rev/min** aciona o alimentador do
 moinho (**K_a = 1.25**), à temperatura ambiente de **70 °F**."""
 
-from math import pi
+from math import pi, atan, cos, tan
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # Decisões a priori
@@ -35,7 +35,7 @@ N_G = numeroDentesCoroa(m_G, N_W, phi_n)   # [dentes] - Número de dentes da cor
 # 1 - Escolha um passo axial para a coroa:
 p_x = 1.5   # [in] - 
 P_t = pi/p_x   # [] - Passo diametral tangencial.
-D = N_G/P_t   # [] - 
+D = N_G/P_t   # [] - Diâmetro médio da coroa.
 a = 0.3183*p_x   # [in] - Adendo.
 b = 0.3683*p_x   # [in] - Dedendo.
 h_t = 0.6866*p_x   # [in] - Profundidade completa.
@@ -45,6 +45,36 @@ d = 2.5   # [in] - Passo diametral.
 C = (D+d)/2   # [in] - Diâmetro médio.
 d_min = (1/3)*(C**0.875)   # [in] - Passo diametral mínimo.
 d_max = (1/1.6)*(C**0.875)   # [in] - Passo diametral máximo.
+
+L = p_x*N_W   # [in] - 
+lambda_avanco = atan(L/(pi*d))   # [rad] - Ângulo de avanço.
+
+V_S = (pi*d*n_W)/(12*cos(lambda_avanco))   # [ft/min] - Velocidade de deslizamento do pinhão.
+V_W = (pi*d*n_W)/(12)   # [ft/min] - Velocidade linear do pinhão.
+n_G = n_W/m_G   # [rev/min] - Velocidade angular da coroa.
+V_G = (pi*D*n_G)/(12)   # [ft/min] - Velocidade linear do pinhão.
+
+# Fator dos materiais
+import fatorMateriais as FM
+tipoFundicaoCoroa = FM.Fundicao.areia
+C_S = FM.fatorMateriais(C, D, tipoFundicaoCoroa)
+
+# Fator de correção da razão de engrenamento
+import fatorCorrecaoRazao as FCR
+C_m = FCR.fatorCorrecaoRazao(m_G)   # [] - Fator de correção da razão de engrenamento.
+
+# Fator de velocidade
+import fatorVelocidade as FV
+C_v = FV.fatorVelocidade(V_S)   # [] - Fator de velocidade.
+
+# Coeficiente de atrito
+import coeficienteAtrito as CA
+f = CA.coeficienteAtrito(V_S)   # [] - Coeficiente de atrito.
+
+# Eficiência mecânica, quando o pinhão conduz o conjunto de engrenagens
+import eficienciaMecanica as EM
+e_W = EM.eficienciaMecanica(phi_n, lambda_avanco, f, EM.Condutor.pinhao)
+e_G = EM.eficienciaMecanica(phi_n, lambda_avanco, f, EM.Condutor.coroa)
 
 # Largura de face da coroa:
 F_G = 1
