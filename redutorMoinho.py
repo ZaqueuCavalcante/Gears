@@ -33,7 +33,7 @@ N_G = numeroDentesCoroa(m_G, N_W, phi_n)   # [dentes] - Número de dentes da cor
 # Decisões de projeto
 
 # 1 - Escolha um passo axial para a coroa:
-p_x = 1.5   # [in] - 
+p_x = 1.5   # [in] - Passo axial da coroa.
 P_t = pi/p_x   # [] - Passo diametral tangencial.
 D = N_G/P_t   # [] - Diâmetro médio da coroa.
 a = 0.3183*p_x   # [in] - Adendo.
@@ -46,7 +46,7 @@ C = (D+d)/2   # [in] - Diâmetro médio.
 d_min = (1/3)*(C**0.875)   # [in] - Passo diametral mínimo.
 d_max = (1/1.6)*(C**0.875)   # [in] - Passo diametral máximo.
 
-L = p_x*N_W   # [in] - 
+L = p_x*N_W   # [in] - Avanço do parafuso sem-fim.
 lambda_avanco = atan(L/(pi*d))   # [rad] - Ângulo de avanço.
 
 V_S = (pi*d*n_W)/(12*cos(lambda_avanco))   # [ft/min] - Velocidade de deslizamento do pinhão.
