@@ -46,13 +46,15 @@ C = (D+d)/2   # [in] - Diâmetro médio.
 d_min = (1/3)*(C**0.875)   # [in] - Passo diametral mínimo.
 d_max = (1/1.6)*(C**0.875)   # [in] - Passo diametral máximo.
 
+import anguloAvanco as AA
 L = p_x*N_W   # [in] - Avanço do parafuso sem-fim.
-lambda_avanco = atan(L/(pi*d))   # [rad] - Ângulo de avanço.
+lambda_avanco = AA.anguloAvanco(L, d, phi_n)   # [°] - Ângulo de avanço.
 
-V_S = (pi*d*n_W)/(12*cos(lambda_avanco))   # [ft/min] - Velocidade de deslizamento do pinhão.
-V_W = (pi*d*n_W)/(12)   # [ft/min] - Velocidade linear do pinhão.
-n_G = n_W/m_G   # [rev/min] - Velocidade angular da coroa.
-V_G = (pi*D*n_G)/(12)   # [ft/min] - Velocidade linear do pinhão.
+import velocidades as VLC
+V_S = VLC.velocidadeDeslizamentoPinhao(d, n_W, lambda_avanco)   # [ft/min] - Velocidade de deslizamento do pinhão.
+V_W = VLC.velocidadeLinear(d, n_W)   # [ft/min] - Velocidade linear do pinhão.
+n_G = VLC.velocidadeAngular(n_W, m_G)   # [rev/min] - Velocidade angular da coroa.
+V_G = VLC.velocidadeLinear(D, n_G)   # [ft/min] - Velocidade linear do pinhão.
 
 # Fator dos materiais
 import fatorMateriais as FM

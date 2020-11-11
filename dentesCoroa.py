@@ -1,5 +1,5 @@
-phi_n_values = [14.5, 17.5, 20, 22.5, 25, 27.5, 30]
-N_G_min_values = [40, 27, 21, 17, 14, 12, 10]
+phi_n_values = [14.5, 20, 25, 30]
+N_G_min_values = [40, 21, 14, 10]
 
 def numeroDentesCoroa(m_G: int, N_W: int, phi_n: float):
     if (phi_n in phi_n_values):
@@ -14,4 +14,3 @@ def numeroDentesCoroa(m_G: int, N_W: int, phi_n: float):
 def getN_W_min(phi_n: float):
     index = phi_n_values.index(phi_n)
     return N_G_min_values[index]
-    
