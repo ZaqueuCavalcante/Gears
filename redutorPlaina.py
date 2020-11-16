@@ -13,7 +13,7 @@ from math import pi, atan, cos, tan, radians, sin
 H_0 = 10   # [hp] - Potência de entrada.
 n_W = 1720   # [rev/min] - Velocidade angular do pinhão.
 m_G = 11   # [] - Razão de velocidades.
-K_a = 1.25   # [] - 
+K_a = 1.25   # [] - Fator de sobrecarga.
 
 # Fator de projeto:
 n_d = 1.2   # [] - Fator de projeto.
@@ -59,7 +59,7 @@ V_G = VLC.velocidadeLinear(D, n_G)   # [ft/min] - Velocidade linear do pinhão.
 # Fator dos materiais
 import fatorMateriais as FM
 tipoFundicaoCoroa = FM.Fundicao.areia
-C_S = FM.fatorMateriais(C, D, tipoFundicaoCoroa)
+C_S = FM.fatorMateriais(C, D, tipoFundicaoCoroa)   # [] - Fator dos materiais.
 
 # Fator de correção da razão de engrenamento
 import fatorCorrecaoRazao as FCR
@@ -78,18 +78,17 @@ import eficienciaMecanica as EM
 e = EM.eficienciaMecanica(phi_n, lambda_avanco, f, EM.Condutor.pinhao)
 
 # Componente tangencial da força nas engrenagens:
-W_t_G = (33000*n_d*H_0*K_a)/(V_G*e)
-cos_phi = cos(radians(phi_n))
-sin_lambda = sin(lambda_avanco)
-cos_lambda = cos(lambda_avanco)
-W_t_W = W_t_G * (cos_phi*sin_lambda + f*cos_lambda) / (cos_phi*cos_lambda - f*sin_lambda)
+import forcaTangencial as FT
+W_t_G = FT.forcaTangencialCoroa(n_d, H_0, K_a, V_G, e)
+W_t_W = FT.forcaTangencialPinhao(phi_n, lambda_avanco, W_t_G, f)
 
 # Potencias transmitidas pelas engrenagens:
-H_W = (pi*d*n_W*W_t_W) / (12*33000)   # [hp] - Potência transmitida pelo pinhão.
-H_G = (pi*D*n_G*W_t_G) / (12*33000)   # [hp] - Potência transmitida pela coroa.
+import potencias as POT
+H_W = POT.potenciaTransmitida(d, n_W, W_t_W)   # [hp] - Potência transmitida pelo pinhão.
+H_G = POT.potenciaTransmitida(D, n_G, W_t_G)   # [hp] - Potência transmitida pela coroa.
 
-W_f = (f*W_t_G) / (f*sin_lambda - cos_phi*cos_lambda)
-H_f = (abs(W_f)*V_S) / (33000)   # [hp] - Potência de atrito.
+W_f = POT.forcaDeAtrito(f, W_t_G, lambda_avanco, phi_n)   # [lbf] - Força de atrito.
+H_f = POT.potenciaDeAtrito(W_f, V_S)   # [hp] - Potência de atrito.
 
 # 3 - Valor de F_e_G:
 F_e_min = (W_t_G) / (C_S*(D**0.8)*C_m*C_v)   # [in] - 
@@ -100,21 +99,36 @@ W_t_adm = C_S*(D**0.8)*F_e_G*C_m*C_v   # [lbf] -
 
 # 4 - Análise térmica:
 import eficienciaTermica as ET
-h_CR = ET.eficienciaTermicaGeral(n_W, ET.Eixo.semVentilador)   # [ft.lbf/(min.in².°F)] - 
-H_perda = 33000*(1-e)*H_W   # [ft.lbf/min] - 
+h_CR = ET.eficienciaTermicaGeral(n_W, ET.Eixo.semVentilador)   # [ft.lbf/(min.in².°F)] - Eficiência térmica geral.
+H_perda = 33000*(1-e)*H_W   # [ft.lbf/min] - Taxa de perda de calor da caixa da coroa sem-fim.
 
-A_min = 43.20*C**1.7   # [in²] - Área lateral mínima (AGMA).
+import areaLateral as AL
+
+A_min = AL.areaMinimaAGMA(C)   # [in²] - Área lateral mínima (AGMA).
+folga = 6   # [in] - Folga.
+[altura, largura, espessura, A_estimada] = AL.areaEstimada(d, D, folga)
 A = 1100   # [in²] - Área lateral da carcaça escolhida.
 
 t_a = 70   # [°F] - Temperatura ambiente.
 t_s = t_a + H_perda/(h_CR*A)   # [°F] - Temperatura do reservatório de óleo.
 
-P_n = P_t/cos_lambda
+# 5 - Tensão de flexão:
+P_n = P_t/cos(radians(lambda_avanco))
 p_n = pi/P_n
 
 import fatorFormaLewis as FFL
 y = FFL.fatorFormaLewis(phi_n)
 
-sigma_flexao_coroa = W_t_G/(p_n*F_e_G*y)   # [psi] - 
+sigma_flexao_coroa = W_t_G/(p_n*F_e_G*y)   # [psi] - Tensão de flexão na coroa.
+
+# Principais resultados:
+print("h_CR =", "%.3f" % h_CR, "[ft.lbf/(min.in².°F)]")
+print("H_perda =", "%.2f" % H_perda, "[ft.lbf/min]")
+print()
+print("A_min =", "%.2f" % A_min, "[in²]")
+print("A_estimada =", "%.2f" % A_estimada, "[in²]")
+print("A =", "%.2f" % A, "[in²]")
+print()
+print("t_oleo =", "%.2f" % t_s, "[°F]")
 
 print("FIM")
